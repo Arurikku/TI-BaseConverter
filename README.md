@@ -1,7 +1,7 @@
 # TI-BaseConverter
 Base converter for TI-83 Premium CE.
 
-Written in C for the eZ80 using [TI-Planet's project builder](https://tiplanet.org/pb/ "Project Builder")
+Written in C for the eZ80 using [TI-Planet's project builder](https://tiplanet.org/pb/ "Project Builder").
 
 # TODO:
 - Fix output memory problem 

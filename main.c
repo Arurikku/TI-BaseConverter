@@ -8,7 +8,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-
+#include <stdio.h>
 const char alphabet[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 
@@ -59,13 +59,14 @@ int main(void)
     int inDec = toDecimal(inputNumber, baseIn, inputSize);
     char outputBuffer[10];
     sprintf(outputBuffer, "%d", inDec);
-    os_ClrHome();
-    printText("Output is: ", 0, 0);
-    printText(outputBuffer, 0, 1);
-    while(!os_GetCSC());
+
     os_ClrHome();
     if(baseOut == 10)
-        return 0;
+    {
+            printf("%s",outputBuffer);
+        while(!os_GetCSC());
+                return 0;
+    }
     int quotient = inDec;
     char actualOutput[10];
     int counter = 0;
@@ -75,12 +76,15 @@ int main(void)
         quotient = (quotient-remainder)/baseOut;
         actualOutput[counter++] = alphabet[remainder];
     }
+    int remainder = quotient % baseOut;
+        quotient = (quotient-remainder)/baseOut;
+        actualOutput[counter++] = alphabet[remainder];
     char theRealOutput[counter];
     for(int i = 0; i < counter; i++)
     {
         theRealOutput[i] = actualOutput[counter-(i+1)];
     }
-    printText(theRealOutput, 0, 1);
+    printf("%.*s", counter, theRealOutput);
     while(!os_GetCSC());
     return 0;
 }
@@ -91,9 +95,6 @@ int toDecimal(char* input, int base, uint8_t size)
     for(int i = 0; i < size; i++)
     {
         int ii = indexOf(input[size-(i+1)]);
-        char buffer[3];
-        sprintf(buffer, "%d", ii);
-        printText(buffer, 0, i);
         if(ii < base && ii > -1)
             output += ii * pow(base, i);
     }

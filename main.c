@@ -15,7 +15,7 @@ const char alphabet[] = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 int indexOf(char c);
 int toDecimal(char* input, int base, uint8_t size);
 void printText(const char *text, uint8_t xpos, uint8_t ypos);
-
+int getIntInput(char* msg, int8_t min, int8_t max);
 
 
 int indexOf(char c)
@@ -29,38 +29,52 @@ int indexOf(char c)
     return -1;
 }
 
-const int8_t BUFFERS_SIZE = 10;
+
+int toDecimal(char* input, int base, uint8_t size)
+{
+    int output = 0;
+    for(int i = 0; i < size; i++)
+    {
+        int ii = indexOf(input[size-(i+1)]);
+        if(ii < base && ii > -1)
+            output += ii * pow(base, i);
+    }
+    return output;
+}
+
+void printText(const char *text, uint8_t xpos, uint8_t ypos)
+{
+    os_SetCursorPos(ypos, xpos);
+    os_PutStrFull(text);
+}
+
+int getIntInput(char* msg, int8_t min, int8_t max)
+{
+	os_ClrHome();
+	char input[3];
+    os_GetStringInput(msg, input, 10);
+    int inputInt = atoi(input);
+    if(inputInt < min || inputInt > max)
+	{
+       pgrm_CleanUp();
+		return 0;
+	}
+	os_ClrHome();
+	return inputInt;
+}
+
 int main(void)
 {
-    os_ClrHome();
-    char inputBase[3];
-    os_GetStringInput("What is input base? ", inputBase, BUFFERS_SIZE);
-    int baseIn = atoi(inputBase);
-    if(baseIn < 2 || baseIn > 36)
-       return 0;
-    os_ClrHome();
-    char outputBase[3];
-    os_GetStringInput("What is output base? ", outputBase, BUFFERS_SIZE);
-    int baseOut = atoi(outputBase);
-    if(baseOut < 2 || baseOut > 36)
-       return 0;
-    char bufferForSize[3];
-    os_ClrHome();
-    os_GetStringInput("Size of number? ", bufferForSize, BUFFERS_SIZE);
-    int inputSize = atoi(bufferForSize);
+	int baseIn = getIntInput("What is input base? ", 2, 36);
+	int baseOut = getIntInput("What is output base? ", 2, 36);
+	int inputSize = getIntInput("Size of number? ", 1, 12);
     char inputNumber[inputSize+1];
-    os_ClrHome();
     printText("Enter number to convert: ", 0, 0);
-    os_GetStringInput( " ", inputNumber, BUFFERS_SIZE);
-    os_ClrHome();
-    printText(inputNumber, 0, 0);
-    while(!os_GetCSC());
+    os_GetStringInput(" ", inputNumber, 12);
     os_ClrHome();
     int inDec = toDecimal(inputNumber, baseIn, inputSize);
     char outputBuffer[10];
     sprintf(outputBuffer, "%d", inDec);
-
-    os_ClrHome();
     if(baseOut == 10)
     {
             printf("%s",outputBuffer);
@@ -76,9 +90,6 @@ int main(void)
         quotient = (quotient-remainder)/baseOut;
         actualOutput[counter++] = alphabet[remainder];
     }
-    int remainder = quotient % baseOut;
-        quotient = (quotient-remainder)/baseOut;
-        actualOutput[counter++] = alphabet[remainder];
     char theRealOutput[counter];
     for(int i = 0; i < counter; i++)
     {
@@ -87,23 +98,4 @@ int main(void)
     printf("%.*s", counter, theRealOutput);
     while(!os_GetCSC());
     return 0;
-}
-
-int toDecimal(char* input, int base, uint8_t size)
-{
-    int output = 0;
-    for(int i = 0; i < size; i++)
-    {
-        int ii = indexOf(input[size-(i+1)]);
-        if(ii < base && ii > -1)
-            output += ii * pow(base, i);
-    }
-    while(!os_GetCSC());
-    return output;
-}
-
-void printText(const char *text, uint8_t xpos, uint8_t ypos)
-{
-    os_SetCursorPos(ypos, xpos);
-    os_PutStrFull(text);
 }

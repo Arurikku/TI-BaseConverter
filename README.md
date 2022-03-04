@@ -4,8 +4,9 @@ Base converter for TI-83 Premium CE.
 Written in C for the eZ80 using [TI-Planet's project builder](https://tiplanet.org/pb/ "Project Builder").
 
 # TODO:
-- Fix output memory problem 
-  - Random characters appear messing up the converted number.
+- Test the fucking program.
+- Add strlen() to get char* length of number input.
+- Cleanup
 
 # How to use
 - Download the BASECONV.8xp file

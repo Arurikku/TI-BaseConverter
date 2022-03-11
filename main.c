@@ -67,10 +67,10 @@ int main(void)
 {
 	int baseIn = getIntInput("What is input base? ", 2, 36);
 	int baseOut = getIntInput("What is output base? ", 2, 36);
-	int inputSize = getIntInput("Size of number? ", 1, 12);
-    char inputNumber[inputSize+1];
+    char inputNumber[12];
     printText("Enter number to convert: ", 0, 0);
     os_GetStringInput(" ", inputNumber, 12);
+    int inputSize = strlen(inputNumber);
     os_ClrHome();
     int inDec = toDecimal(inputNumber, baseIn, inputSize);
     char outputBuffer[10];
@@ -78,7 +78,8 @@ int main(void)
     if(baseOut == 10)
     {
             printf("%s",outputBuffer);
-        while(!os_GetCSC());
+        while(!os_GetCSC())
+            ;
                 return 0;
     }
     int quotient = inDec;
